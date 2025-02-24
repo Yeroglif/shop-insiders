@@ -37,16 +37,30 @@ export default function ProductList({
   handleAddSavedProduct,
   handleDeleteSavedProduct,
 }: LayoutProps) {
+  const [productSearch, setProductSearch] = useState("");
 
-    // Set up state for pagination
+  const filteredProduct = products.filter((ele, eleIndex) => {
+    // check title
+    if (ele.title.toLowerCase().includes(productSearch.toLowerCase())) {
+      return true;
+    }
+    // check description
+    if (ele.description.toLowerCase().includes(productSearch.toLowerCase())) {
+      return true;
+    }
+
+    return false;
+  });
+
+  // Set up state for pagination
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 10;
 
   // Calculate total number of pages
-  const totalPages = Math.ceil(products.length / productsPerPage);
+  const totalPages = Math.ceil(filteredProduct.length / productsPerPage);
 
   // Slice the products array for the current page
-  const currentProducts = products.slice(
+  const currentProducts = filteredProduct.slice(
     (currentPage - 1) * productsPerPage,
     currentPage * productsPerPage
   );
@@ -56,9 +70,18 @@ export default function ProductList({
     setCurrentPage(newPage);
   };
 
-
   return (
     <div>
+      <div>
+        <input
+          onChange={(e) => {
+            setProductSearch(e.target.value);
+          }}
+          type="text"
+          placeholder="Search products"
+          value={productSearch}
+        />
+      </div>
       {currentProducts?.map((product, prodictIndex) => {
         return (
           <ProductCard key={prodictIndex} product={product}>
