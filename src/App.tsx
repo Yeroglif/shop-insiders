@@ -25,7 +25,6 @@ function App() {
     newsavedProducts.push(product);
     setSavedProducts(newsavedProducts);
     localStorage.setItem("savedProducts", JSON.stringify(newsavedProducts));
-    console.log("added product", product);
   }
 
   function handleDeleteSavedProduct(product: Product) {

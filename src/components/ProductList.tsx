@@ -22,6 +22,8 @@ export default function ProductList({
 }: LayoutProps) {
   const [productSearch, setProductSearch] = useState("");
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [minPrice, setMinPrice] = useState(0);
+  const [maxPrice, setMaxPrice] = useState(9999);
 
   const productCatagories = [
     ...new Set<string>(products?.map((product) => product.category)),
@@ -45,6 +47,12 @@ export default function ProductList({
       if (selectedCategories.includes(ele.category)) {
         return true;
       } else if (!selectedCategories.length) {
+        return true;
+      }
+      return false;
+    })
+    .filter((ele) => {
+      if (Number(ele.price) < maxPrice && Number(ele.price) > minPrice) {
         return true;
       }
       return false;
@@ -114,6 +122,27 @@ export default function ProductList({
             </button>
           );
         })}
+        {/* Price filtering */}
+        <label id="min-price">Min price:</label>
+        <input
+          id="min-price"
+          min={0}
+          onChange={(e) => {
+            setMinPrice(Number(e.target.value));
+          }}
+          type="number"
+          value={minPrice}
+        />
+        <label id="max-price">Max price:</label>
+        <input
+          id="max-price"
+          min={0}
+          onChange={(e) => {
+            setMaxPrice(Number(e.target.value));
+          }}
+          type="number"
+          value={maxPrice}
+        />
         {/* products display */}
       </div>
       {currentProducts?.map((product, prodictIndex) => {
