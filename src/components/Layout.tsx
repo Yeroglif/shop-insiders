@@ -76,11 +76,11 @@ export default function Layout({
     }
     try {
       setIsLoggingIn(true);
-      const response = await fetch("https://fakestoreapi.com/auth/login", {
-        method: "POST",
-        body: JSON.stringify({"username" : "mor_2314",
-          "password" : "83r5^_"}),
-      });
+      // const response = await fetch("https://fakestoreapi.com/auth/login", {
+      //   method: "POST",
+      //   body: JSON.stringify({"username" : userName,
+      //     "password" : userPassword}),
+      // });
       // if (!response.ok) {
       //   throw new Error(`HTTP error! Status: ${response.status}`);
       // }

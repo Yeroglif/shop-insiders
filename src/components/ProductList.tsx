@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import ProductCard from "./ProductCard";
 type Product = {
   id: number;

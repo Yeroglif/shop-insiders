@@ -1,15 +1,21 @@
-import ReactDom from 'react-dom'
-export default function Modal(props) {
-    const {children, handleCloseModal} = props
+import ReactDom from 'react-dom';
 
-    return ReactDom.createPortal(
-            <div className='modal-container'>
-                <button onClick={handleCloseModal} className='modal-underlay' />
-                <div className='modal-content'>
-                    {children}
-                </div>
+type LayoutProps = {
+  children: React.ReactNode;
+  handleCloseModal?: () => void;
+  isAuthorized?: boolean;
+};
 
-            </div>,
-            document.getElementById('portal')
-        )
+export default function Modal({ children, handleCloseModal }: LayoutProps) {
+  const portalElement = document.getElementById('portal');
+
+  if (!portalElement) return null; // If portal doesn't exist, return null
+
+  return ReactDom.createPortal(
+    <div className="modal-container">
+      <button onClick={handleCloseModal} className="modal-underlay" />
+      <div className="modal-content">{children}</div>
+    </div>,
+    portalElement
+  );
 }
