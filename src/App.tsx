@@ -1,35 +1,58 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-
+import { useEffect, useState } from "react";
+import Layout from "./components/Layout.tsx";
+import ProductList from "./components/ProductList.tsx";
+type Product = {
+  id: number;
+  title: string;
+  price: number;
+  category: string;
+  description: string;
+  image: string;
+};
 function App() {
-  const [count, setCount] = useState(0)
+  const [isShowSaved, setIsShowSaved] = useState(false);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [savedProducts, setSavedProducts] = useState([{}]);
+  const [isLoading, setisLoading] = useState(false)
+
+  useEffect(()=>{
+    // checking if fetch is needed
+    if (isLoading) {
+      return;
+    }
+    // fetch data from api if there is none of it in the cache
+
+    async function fetchProductsData() {
+      setisLoading(true);
+      try {
+        const response = await fetch("https://fakestoreapi.com/products");
+    
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+    
+        const productsData: Product[] = await response.json(); 
+        console.log("Fetched products:", productsData);
+        setProducts(productsData);
+      } catch (err) {
+        console.error("Error fetching products:", err);
+      } finally {
+        setisLoading(false);
+      }
+    }
+    
+
+    fetchProductsData();
+  }, [])
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <Layout>
+        <ProductList products={products} />
+        {isShowSaved && <ProductList />}
+      </Layout>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
