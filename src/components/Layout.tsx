@@ -1,9 +1,30 @@
-export default function Layout(props: { children: React.ReactNode }) {
-  const { children } = props;
+type LayoutProps = {
+  children: React.ReactNode;
+  setIsShowSaved?: (isShowSaved: boolean) => void;
+};
 
+export default function Layout({ children, setIsShowSaved }: LayoutProps) {
   const header = (
     <div>
-      <h1 className="text-gradient">Shop-Insiders</h1>
+      <button onClick={()=>{
+        if (setIsShowSaved) {
+          setIsShowSaved(false);
+        }
+      }}>
+        <h1 className="text-gradient">Shop-Insiders</h1>
+      </button>
+      <button
+        onClick={() => {
+          if (setIsShowSaved) {
+            setIsShowSaved(true);
+            console.log('Show Saved')
+          }else {
+            console.log('setSHowSaved is undefined')
+          }
+        }}
+      >
+        Saved
+      </button>
     </div>
   );
 
