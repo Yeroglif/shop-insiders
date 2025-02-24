@@ -19,7 +19,7 @@ export default function Layout({
   const [username, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const header = (
-    <div>
+    <div className="flex flex-row justify-between">
       {/* Open main window view button */}
       <button
         onClick={() => {
@@ -47,7 +47,6 @@ export default function Layout({
       {/* Log in button */}
       {!isAuthorized && (
         <button
-          className="pl-64"
           onClick={() => {
             if (setIsShowModal) {
               setIsShowModal(true);
@@ -100,7 +99,7 @@ export default function Layout({
   }
 
   return (
-    <div>
+    <div className="flex flex-col gap-4">
       {header}
       {children}
       {/* Log in modal */}

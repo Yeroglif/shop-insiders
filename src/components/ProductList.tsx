@@ -29,13 +29,13 @@ export default function ProductList({
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(9999);
   // Minimum rating score
-  const [minRating, setMinRating] = useState(0)
-// Categories array with uniques elemements
+  const [minRating, setMinRating] = useState(0);
+  // Categories array with uniques elemements
   const productCatagories = [
     ...new Set<string>(products?.map((product) => product.category)),
   ];
 
-  // Filtered products 
+  // Filtered products
   const filteredProduct = products
     ?.filter((ele) => {
       // check title
@@ -63,11 +63,12 @@ export default function ProductList({
         return true;
       }
       return false;
-    }).filter((ele)=>{
-      if(ele.rating.rate > minRating) {
-        return true
+    })
+    .filter((ele) => {
+      if (ele.rating.rate > minRating) {
+        return true;
       }
-      return false
+      return false;
     });
 
   // Set up state for pagination
@@ -93,9 +94,9 @@ export default function ProductList({
   };
 
   return (
-    <div>
+    <div className="flex flex-col gap-2">
       {/* Products filtering */}
-      <div>
+      <div className="flex flex-col gap-2">
         {/* Search */}
         <input
           onChange={(e) => {
@@ -106,30 +107,34 @@ export default function ProductList({
           value={productSearch}
         />
         {/* Category filtering */}
-        {productCatagories?.map((category, categoryIndex) => {
-          return (
-            <button
-              key={categoryIndex}
-              onClick={() => {
-                if (!selectedCategories.includes(category)) {
-                  const newCategories = [...selectedCategories];
-                  newCategories.push(category);
-                  setSelectedCategories(newCategories);
-                } else {
-                  const newCategories = [...selectedCategories].filter((el) => {
-                    if (el === category) {
-                      return false;
-                    }
-                    return true;
-                  });
-                  setSelectedCategories(newCategories);
-                }
-              }}
-            >
-              {category}
-            </button>
-          );
-        })}
+        <div>
+          {productCatagories?.map((category, categoryIndex) => {
+            return (
+              <button
+                key={categoryIndex}
+                onClick={() => {
+                  if (!selectedCategories.includes(category)) {
+                    const newCategories = [...selectedCategories];
+                    newCategories.push(category);
+                    setSelectedCategories(newCategories);
+                  } else {
+                    const newCategories = [...selectedCategories].filter(
+                      (el) => {
+                        if (el === category) {
+                          return false;
+                        }
+                        return true;
+                      }
+                    );
+                    setSelectedCategories(newCategories);
+                  }
+                }}
+              >
+                {category}
+              </button>
+            );
+          })}
+        </div>
         {/* Price filtering */}
         <label id="min-price">Min price:</label>
         <input
@@ -153,26 +158,20 @@ export default function ProductList({
         />
         {/* Rating filtering */}
         <label>Min rating score:</label>
-        <input step={0.1} type="number" onChange={(e)=>{
-          setMinRating(Number(e.target.value))
-        }} min={0} value={minRating}></input>
+        <input
+          step={0.1}
+          type="number"
+          onChange={(e) => {
+            setMinRating(Number(e.target.value));
+          }}
+          min={0}
+          value={minRating}
+        ></input>
         {/* products display */}
       </div>
       {currentProducts?.map((product, prodictIndex) => {
         return (
           <ProductCard key={prodictIndex} product={product}>
-            <button
-              onClick={() => {
-                // Delete logic
-                if (handleDeleteSavedProduct) {
-                  handleDeleteSavedProduct(product);
-                } else {
-                  console.log("handleDeleteSavedProduct is undefined");
-                }
-              }}
-            >
-              Delete
-            </button>
             <button
               onClick={() => {
                 // Save logic
@@ -185,11 +184,23 @@ export default function ProductList({
             >
               Save
             </button>
+            <button
+              onClick={() => {
+                // Delete logic
+                if (handleDeleteSavedProduct) {
+                  handleDeleteSavedProduct(product);
+                } else {
+                  console.log("handleDeleteSavedProduct is undefined");
+                }
+              }}
+            >
+              Delete
+            </button>
           </ProductCard>
         );
       })}
       {/* Page change logic */}
-      <div>
+      <div className="flex flex-row justify-around">
         <button
           disabled={currentPage === 1}
           onClick={() => handlePageChange(currentPage - 1)}

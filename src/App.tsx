@@ -91,6 +91,7 @@ function App() {
         setIsAuthorized={setIsAuthorized}
         isAuthorized={isAuthorized}
       >
+        {/* Contents of the layout are onli visible if you are authorized */}
         {isAuthorized && !isShowSaved && (
           <ProductList
             isShowSaved={isShowSaved}

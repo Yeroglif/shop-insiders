@@ -1,3 +1,5 @@
+import { Rating } from "@mui/material";
+
 type LayoutProps = {
   children: React.ReactNode;
   product?: {
@@ -16,11 +18,13 @@ export default function ProductCard({
   product,
 }: LayoutProps) {
   return (
-    <div>
+    <div className="flex flex-col gap-2">
       <h2>{product?.title}</h2>
       <p>{product?.category}</p>
       <p>{product?.price} $</p>
       <p>Stars: {product?.rating.rate}</p>
+      {/* Material UI Star Rating */}
+      <Rating name="half-rating-read" value={product?.rating.rate} precision={0.1} readOnly />
       {children}
       <img src={product?.image} />
       <p>{product?.description}</p>
