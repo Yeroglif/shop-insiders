@@ -1,3 +1,4 @@
+import { useState } from "react";
 import ProductCard from "./ProductCard";
 
 type LayoutProps = {
@@ -36,9 +37,29 @@ export default function ProductList({
   handleAddSavedProduct,
   handleDeleteSavedProduct,
 }: LayoutProps) {
+
+    // Set up state for pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const productsPerPage = 10;
+
+  // Calculate total number of pages
+  const totalPages = Math.ceil(products.length / productsPerPage);
+
+  // Slice the products array for the current page
+  const currentProducts = products.slice(
+    (currentPage - 1) * productsPerPage,
+    currentPage * productsPerPage
+  );
+
+  // Handle page change
+  const handlePageChange = (newPage: number) => {
+    setCurrentPage(newPage);
+  };
+
+
   return (
     <div>
-      {products?.map((product, prodictIndex) => {
+      {currentProducts?.map((product, prodictIndex) => {
         return (
           <ProductCard key={prodictIndex} product={product}>
             <button
@@ -68,6 +89,24 @@ export default function ProductList({
           </ProductCard>
         );
       })}
+      {/* Page change logic */}
+      <div>
+        <button
+          disabled={currentPage === 1}
+          onClick={() => handlePageChange(currentPage - 1)}
+        >
+          Previous
+        </button>
+        <span>
+          Page {currentPage} of {totalPages}
+        </span>
+        <button
+          disabled={currentPage === totalPages}
+          onClick={() => handlePageChange(currentPage + 1)}
+        >
+          Next
+        </button>
+      </div>
     </div>
   );
 }
