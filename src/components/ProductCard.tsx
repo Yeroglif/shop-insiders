@@ -1,4 +1,5 @@
 type LayoutProps = {
+  children: React.ReactNode;
   product?: {
     id: number;
     title: string;
@@ -7,36 +8,18 @@ type LayoutProps = {
     description: string;
     image: string;
   };
-  handleAddSavedProduct?: (product: {
-    id: number;
-    title: string;
-    price: string;
-    category: string;
-    description: string;
-    image: string;
-  }) => void;
 };
 
 export default function ProductCard({
+  children,
   product,
-  handleAddSavedProduct,
 }: LayoutProps) {
   return (
     <div>
       <h2>{product?.title}</h2>
       <p>{product?.category}</p>
       <p>{product?.price} $</p>
-      <button
-        onClick={() => {
-          if (handleAddSavedProduct) {
-            handleAddSavedProduct(product);
-          }else {
-            console.log('handleAddSavedProduct is undefined')
-          }
-        }}
-      >
-        Save
-      </button>
+      {children}
       <img src={product?.image} />
       <p>{product?.description}</p>
     </div>

@@ -28,6 +28,18 @@ function App() {
     console.log("added product", product);
   }
 
+  function handleDeleteSavedProduct(product: Product) {
+    if (!savedProducts.some((p) => p.id === product.id)) {
+      console.log("no such product in the array");
+      return;
+    }
+    const newsavedProducts = [...savedProducts];
+    newsavedProducts.splice(newsavedProducts.indexOf(product),1);
+    setSavedProducts(newsavedProducts);
+    localStorage.setItem("savedProducts", JSON.stringify(newsavedProducts));
+    console.log("deleted product", product);
+  }
+
   useEffect(() => {
     //check for saved products
     if (localStorage.getItem("savedProducts")) {
@@ -67,21 +79,29 @@ function App() {
 
     fetchProductsData();
   }, []);
-
+useEffect(()=>{
+  console.log(isShowSaved)
+}, [isShowSaved])
   return (
     <>
-      <Layout setIsShowSaved={setIsShowSaved}>
-        {!isAuthorized && !isShowSaved && (
-          <ProductList
-            products={products}
-            handleAddSavedProduct={handleAddSavedProduct}
-          />
-        )}
-        {!isAuthorized && isShowSaved && (
-          <ProductList products={savedProducts} />
-        )}
-      </Layout>
-    </>
+  <Layout setIsShowSaved={setIsShowSaved}>
+    {!isAuthorized && !isShowSaved && (
+      <ProductList
+        isShowSaved={isShowSaved}
+        products={products}
+        handleAddSavedProduct={handleAddSavedProduct} // Make sure this is passed when isShowSaved is false
+      />
+    )}
+
+    {!isAuthorized && isShowSaved && (
+      <ProductList
+        products={savedProducts}
+        handleDeleteSavedProduct={handleDeleteSavedProduct} // Pass delete handler when showing saved products
+      />
+    )}
+  </Layout>
+</>
+
   );
 }
 
