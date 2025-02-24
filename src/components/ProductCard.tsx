@@ -7,6 +7,7 @@ type LayoutProps = {
     category: string;
     description: string;
     image: string;
+    rating: { count: number; rate: number };
   };
 };
 
@@ -19,6 +20,7 @@ export default function ProductCard({
       <h2>{product?.title}</h2>
       <p>{product?.category}</p>
       <p>{product?.price} $</p>
+      <p>Stars: {product?.rating.rate}</p>
       {children}
       <img src={product?.image} />
       <p>{product?.description}</p>

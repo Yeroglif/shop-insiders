@@ -7,6 +7,7 @@ type Product = {
   category: string;
   description: string;
   image: string;
+  rating: { count: number; rate: number };
 };
 type LayoutProps = {
   children: React.ReactNode;
@@ -20,15 +21,21 @@ export default function ProductList({
   handleAddSavedProduct,
   handleDeleteSavedProduct,
 }: LayoutProps) {
+  // State for product search bar
   const [productSearch, setProductSearch] = useState("");
+  // State for all selected categories to filter
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  // Minimim and maximum price states
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(9999);
-
+  // Minimum rating score
+  const [minRating, setMinRating] = useState(0)
+// Categories array with uniques elemements
   const productCatagories = [
     ...new Set<string>(products?.map((product) => product.category)),
   ];
 
+  // Filtered products 
   const filteredProduct = products
     ?.filter((ele) => {
       // check title
@@ -56,6 +63,11 @@ export default function ProductList({
         return true;
       }
       return false;
+    }).filter((ele)=>{
+      if(ele.rating.rate > minRating) {
+        return true
+      }
+      return false
     });
 
   // Set up state for pagination
@@ -79,10 +91,6 @@ export default function ProductList({
   const handlePageChange = (newPage: number) => {
     setCurrentPage(newPage);
   };
-
-  useEffect(() => {
-    console.log(selectedCategories);
-  }, [selectedCategories]);
 
   return (
     <div>
@@ -143,6 +151,11 @@ export default function ProductList({
           type="number"
           value={maxPrice}
         />
+        {/* Rating filtering */}
+        <label>Min rating score:</label>
+        <input step={0.1} type="number" onChange={(e)=>{
+          setMinRating(Number(e.target.value))
+        }} min={0} value={minRating}></input>
         {/* products display */}
       </div>
       {currentProducts?.map((product, prodictIndex) => {

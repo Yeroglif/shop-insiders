@@ -16,8 +16,8 @@ export default function Layout({
 }: LayoutProps) {
   const [isLogingIn, setIsLoggingIn] = useState(false);
   const [isShowModal, setIsShowModal] = useState(false);
-  const [userName, setUserName] = useState('')
-  const [password, setPassword] = useState('')
+  const [username, setUserName] = useState("");
+  const [password, setPassword] = useState("");
   const header = (
     <div>
       {/* Open main window view button */}
@@ -36,7 +36,6 @@ export default function Layout({
           onClick={() => {
             if (setIsShowSaved) {
               setIsShowSaved(true);
-              console.log("Show Saved");
             } else {
               console.log("setSHowSaved is undefined");
             }
@@ -45,9 +44,10 @@ export default function Layout({
           Saved
         </button>
       )}
-      {/* Sign up button */}
+      {/* Log in button */}
       {!isAuthorized && (
         <button
+          className="pl-64"
           onClick={() => {
             if (setIsShowModal) {
               setIsShowModal(true);
@@ -71,21 +71,27 @@ export default function Layout({
     </div>
   );
 
-  async function LogInUser(userName: string, password: string) {
+  async function LogInUser(userName: string, userPassword: string) {
     if (isLogingIn) {
       return;
     }
     try {
       setIsLoggingIn(true);
-      fetch("https://fakestoreapi.com/auth/login", {
+      const response = await fetch("https://fakestoreapi.com/auth/login", {
         method: "POST",
-        body: JSON.stringify({
-          username: "mor_2314",
-          password: "83r5^_",
-        }),
-      })
-        .then((res) => res.json())
-        .then((json) => console.log(json));
+        body: JSON.stringify({"username" : "mor_2314",
+          "password" : "83r5^_"}),
+      });
+      // if (!response.ok) {
+      //   throw new Error(`HTTP error! Status: ${response.status}`);
+      // }
+
+      // const tokenData = await response.json();
+      // console.log(tokenData);
+      if (setIsAuthorized && setIsShowModal) {
+        setIsAuthorized(true);
+        setIsShowModal(false)
+      }
     } catch (error) {
       console.log(error);
     } finally {
@@ -98,13 +104,36 @@ export default function Layout({
       {header}
       {children}
       {/* Log in modal */}
-      {isShowModal && <Modal handleCloseModal={()=>{
-        setIsShowModal(false)
-      }}>
-        <h2>Log into your account</h2>
-        <input value={userName} placeholder="Enter Username" />
-        <input placeholder="Enter Password" />
-        </Modal>}
+      {isShowModal && (
+        <Modal
+          handleCloseModal={() => {
+            setIsShowModal(false);
+          }}
+        >
+          <h2>Log into your account</h2>
+          <input
+            onChange={(e) => {
+              setUserName(e.target.value);
+            }}
+            value={username}
+            placeholder="Enter Username"
+          />
+          <input
+            onChange={(e) => {
+              setPassword(e.target.value);
+            }}
+            value={password}
+            placeholder="Enter Password"
+          />
+          <button
+            onClick={() => {
+              LogInUser(username, password);
+            }}
+          >
+            Log In
+          </button>
+        </Modal>
+      )}
       {footer}
     </div>
   );
