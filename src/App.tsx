@@ -10,12 +10,17 @@ type Product = {
   image: string;
 };
 function App() {
+  // State to check if saved products window is open
   const [isShowSaved, setIsShowSaved] = useState(false);
+  // State to contain all products 
   const [products, setProducts] = useState<Product[]>([]);
+  // State to contain all saved products
   const [savedProducts, setSavedProducts] = useState<Product[]>([]);
+  // Check if data is loading from API
   const [isLoading, setisLoading] = useState(false);
+  // Check if user is Logged in
   const [isAuthorized, setIsAuthorized] = useState(false);
-
+// Add saved products
   function handleAddSavedProduct(product: Product) {
     if (savedProducts.some((p) => p.id === product.id)) {
       console.log("product already in the array");
@@ -26,7 +31,7 @@ function App() {
     setSavedProducts(newsavedProducts);
     localStorage.setItem("savedProducts", JSON.stringify(newsavedProducts));
   }
-
+// Delete a saved product from saved products
   function handleDeleteSavedProduct(product: Product) {
     if (!savedProducts.some((p) => p.id === product.id)) {
       console.log("no such product in the array");
@@ -80,20 +85,20 @@ function App() {
   }, []);
   return (
     <>
-  <Layout setIsShowSaved={setIsShowSaved}>
-    {!isAuthorized && !isShowSaved && (
+  <Layout setIsShowSaved={setIsShowSaved} setIsAuthorized={setIsAuthorized} isAuthorized={isAuthorized}>
+    {isAuthorized && !isShowSaved && (
       <ProductList
-        isShowSaved={isShowSaved}
-        products={products}
-        handleAddSavedProduct={handleAddSavedProduct} // Make sure this is passed when isShowSaved is false
-      />
+            isShowSaved={isShowSaved}
+            products={products}
+            handleAddSavedProduct={handleAddSavedProduct} 
+            children={undefined}      />
     )}
 
-    {!isAuthorized && isShowSaved && (
+    {isAuthorized && isShowSaved && (
       <ProductList
-        products={savedProducts}
-        handleDeleteSavedProduct={handleDeleteSavedProduct} // Pass delete handler when showing saved products
-      />
+            products={savedProducts}
+            handleDeleteSavedProduct={handleDeleteSavedProduct}
+            children={undefined} isShowSaved={false}      />
     )}
   </Layout>
 </>
