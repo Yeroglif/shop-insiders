@@ -70,13 +70,15 @@ export default function Layout({
     </div>
   );
 
-  async function LogInUser(userName: string, userPassword: string) {
+  async function LogInUser(
+    // userName: string, userPassword: string
+  ) {
     if (isLogingIn) {
       return;
     }
     try {
       setIsLoggingIn(true);
-      userName = userPassword
+      // userName = userPassword
       // const response = await fetch("https://fakestoreapi.com/auth/login", {
       //   method: "POST",
       //   body: JSON.stringify({"username" : userName,
@@ -127,7 +129,8 @@ export default function Layout({
           />
           <button
             onClick={() => {
-              LogInUser(username, password);
+              // LogInUser(username, password);
+              LogInUser()
             }}
           >
             Log In
