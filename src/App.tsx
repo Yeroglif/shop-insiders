@@ -79,9 +79,6 @@ function App() {
 
     fetchProductsData();
   }, []);
-useEffect(()=>{
-  console.log(isShowSaved)
-}, [isShowSaved])
   return (
     <>
   <Layout setIsShowSaved={setIsShowSaved}>
