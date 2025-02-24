@@ -76,6 +76,7 @@ export default function Layout({
     }
     try {
       setIsLoggingIn(true);
+      userName = userPassword
       // const response = await fetch("https://fakestoreapi.com/auth/login", {
       //   method: "POST",
       //   body: JSON.stringify({"username" : userName,
